@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "../../proj1"
+		},
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "akshin-portfolio"
+	}
+}

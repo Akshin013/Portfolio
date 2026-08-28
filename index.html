@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Akshin Gadimov — Full-Stack Developer</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+  href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Instrument+Sans:wght@400;500;600;700&display=swap"
+  rel="stylesheet"
+>
+
+<style>
+  :root {
+    --paper: #F0F3EC;
+    --paper-2: #E6EADD;
+    --paper-3: #DEE3D3;
+    --ink: #12140F;
+    --muted: #6B6E60;
+    --line: rgba(18,20,15,.15);
+    --accent: #FF4A1C;
+    --accent-soft: rgba(255,74,28,.12);
+    --terminal-bg: #12140F;
+    --terminal-txt: #F0F3EC;
+  }
+
+  [data-theme="dark"] {
+    --paper: #0E100D;
+    --paper-2: #161914;
+    --paper-3: #1E221B;
+    --ink: #F0F3EC;
+    --muted: #8E9382;
+    --line: rgba(240,243,236,.12);
+    --accent: #FF5A2C;
+    --accent-soft: rgba(255,90,44,.18);
+    --terminal-bg: #080907;
+    --terminal-txt: #9FE870;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Instrument Sans", sans-serif;
+    overflow-x: hidden;
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size: 64px 64px;
+    background-position: -1px -1px;
+    transition: background-color .3s, color .3s;
+  }
+
+  a { color: inherit; text-decoration: none; }
+  .mono { font-family: "JetBrains Mono", monospace; }
+  ::selection { background: var(--ink); color: var(--paper); }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+  /* ================= NAV ================= */
+
+  .nav {
+    position: fixed;
+    z-index: 100;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(1160px, calc(100% - 24px));
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 11px 12px 11px 18px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: rgba(240,243,236,.78);
+    backdrop-filter: blur(14px);
+    transition: background .3s;
+  }
+
+  [data-theme="dark"] .nav {
+    background: rgba(14,16,13,.82);
+  }
+
+  .logo {
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: -.02em;
+    flex-shrink: 0;
+  }
+
+  .logo span { color: var(--accent); }
+
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    max-width: 100%;
+  }
+
+  .nav-links { display: flex; gap: 2px; }
+
+  .nav-links a {
+    padding: 8px 12px;
+    border-radius: 7px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    color: var(--muted);
+    transition: .2s;
+  }
+
+  .nav-links a:hover { background: var(--ink); color: var(--paper); }
+
+  /* ================= CONTROLS ================= */
+
+  .control-group {
+    display: flex;
+    gap: 3px;
+    padding: 3px;
+    border: 1px solid var(--line);
+    border-radius: 7px;
+    background: var(--paper-2);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    flex-shrink: 0;
+  }
+
+  .ctrl-btn {
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    padding: 4px 7px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: 600;
+    transition: .2s;
+  }
+
+  .ctrl-btn.active, .ctrl-btn:hover {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .status {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 11px;
+    border: 1px solid var(--line);
+    border-radius: 7px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: .02em;
+    color: var(--muted);
+    flex-shrink: 0;
+  }
+
+  .status-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse { 50% { opacity: .35; transform: scale(.75); } }
+
+  /* ================= HERO ================= */
+
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 130px 20px 80px;
+  }
+
+  .hero-container {
+    width: min(1240px, 100%);
+    margin: auto;
+    display: grid;
+    grid-template-columns: 1.2fr .8fr;
+    gap: 60px;
+    align-items: center;
+  }
+
+  .eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 22px;
+    color: var(--muted);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    letter-spacing: .02em;
+  }
+
+  .eyebrow .status-dot { position: relative; top: -1px; }
+
+  h1 {
+    font-family: "JetBrains Mono", monospace;
+    font-size: clamp(32px, 5.6vw, 74px);
+    line-height: 1.05;
+    letter-spacing: -.03em;
+    font-weight: 700;
+  }
+
+  h1 .cursor {
+    display: inline-block;
+    width: .5em;
+    height: .82em;
+    background: var(--accent);
+    margin-left: 4px;
+    transform: translateY(.1em);
+    animation: blink 1.1s steps(1) infinite;
+  }
+
+  @keyframes blink { 50% { opacity: 0; } }
+
+  h1 em {
+    font-style: normal;
+    background: var(--accent);
+    color: var(--paper);
+    padding: 0 6px;
+    border-radius: 4px;
+  }
+
+  .hero-description {
+    max-width: 520px;
+    margin-top: 24px;
+    color: var(--muted);
+    font-size: clamp(14px, 2vw, 16px);
+    line-height: 1.6;
+  }
+
+  /* ================= BUTTONS ================= */
+
+  .buttons { display: flex; gap: 10px; margin-top: 32px; flex-wrap: wrap; }
+
+  .button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 13px 18px;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    font-weight: 500;
+    transition: .25s;
+    cursor: pointer;
+    background: transparent;
+    color: var(--ink);
+  }
+
+  .button-primary { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .button-primary:hover { background: var(--accent); border-color: var(--accent); transform: translateY(-2px); }
+  .button:not(.button-primary):hover { border-color: var(--ink); transform: translateY(-2px); }
+
+  /* ================= ID CARD ================= */
+
+  .id-area { display: flex; justify-content: center; perspective: 1200px; }
+
+  .id-card {
+    width: min(340px, 100%);
+    position: relative;
+    border-radius: 18px;
+    background: var(--paper-2);
+    border: 1px solid var(--line);
+    padding: 16px;
+    transform-style: preserve-3d;
+    transition: transform .15s ease-out;
+    will-change: transform;
+  }
+
+  .id-corner {
+    position: absolute;
+    width: 16px; height: 16px;
+    border: 2px solid var(--ink);
+    opacity: .5;
+  }
+  .id-corner.tl { top: 8px; left: 8px; border-right: 0; border-bottom: 0; }
+  .id-corner.tr { top: 8px; right: 8px; border-left: 0; border-bottom: 0; }
+  .id-corner.bl { bottom: 8px; left: 8px; border-right: 0; border-top: 0; }
+  .id-corner.br { bottom: 8px; right: 8px; border-left: 0; border-top: 0; }
+
+  .id-photo {
+    width: 100%;
+    aspect-ratio: 4/4.6;
+    border-radius: 10px;
+    overflow: hidden;
+    background: var(--paper-3);
+  }
+
+  .id-photo img {
+    width: 100%; height: 100%; object-fit: cover; display: block;
+    user-select: none; pointer-events: none;
+    filter: grayscale(.15) contrast(1.03);
+  }
+
+  .id-plate {
+    margin-top: 14px;
+    border-top: 1px dashed var(--line);
+    padding-top: 14px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11.5px;
+  }
+
+  .id-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+    color: var(--muted);
+  }
+
+  .id-row b { color: var(--ink); font-weight: 600; }
+  .id-row .accent-val { color: var(--accent); }
+
+  /* ================= TICKER ================= */
+
+  .ticker {
+    overflow: hidden;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    white-space: nowrap;
+    background: var(--paper-2);
+  }
+
+  .ticker-track {
+    display: inline-flex;
+    gap: 24px;
+    padding: 13px 0;
+    animation: ticker 28s linear infinite;
+    color: var(--muted);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+  }
+
+  .ticker-track b { color: var(--accent); font-weight: 500; }
+
+  @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* ================= SECTIONS ================= */
+
+  section:not(.hero) { padding: 90px 20px; }
+  .container { width: min(1160px, 100%); margin: auto; }
+
+  .section-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--accent);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+  }
+
+  .section-title {
+    margin-top: 12px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: clamp(28px, 4.6vw, 54px);
+    letter-spacing: -.03em;
+    line-height: 1.05;
+  }
+
+  /* ================= WORK / FILE TREE ================= */
+
+  .tree {
+    margin-top: 36px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--paper-2);
+  }
+
+  .tree-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 18px;
+    border-bottom: 1px solid var(--line);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .tree-head .dots { display: flex; gap: 5px; margin-right: 6px; }
+  .tree-head .dots i { width: 8px; height: 8px; border-radius: 50%; background: var(--paper-3); display: block; }
+
+  .file-row {
+    display: block;
+    padding: 22px 18px;
+    border-bottom: 1px solid var(--line);
+    transition: .25s;
+  }
+
+  .file-row:last-child { border-bottom: 0; }
+  .file-row:hover { background: var(--accent-soft); }
+
+  .file-head {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px 12px;
+  }
+
+  .file-branch { color: var(--muted); font-family: "JetBrains Mono", monospace; font-size: 13px; }
+
+  .file-name {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: -.01em;
+  }
+
+  .file-badge {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: .04em;
+    padding: 3px 8px;
+    border-radius: 5px;
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .file-badge.live { background: var(--accent); }
+  .file-link-arrow { margin-left: auto; color: var(--muted); font-size: 16px; transition: .2s; }
+  .file-row:hover .file-link-arrow { color: var(--accent); transform: translate(3px,-3px); }
+
+  .file-content {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 24px;
+    align-items: center;
+    margin-top: 14px;
+  }
+
+  .file-desc {
+    max-width: 640px;
+    color: var(--muted);
+    font-size: 14.5px;
+    line-height: 1.6;
+  }
+
+  .file-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 13px; }
+
+  .file-tag {
+    padding: 4px 8px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10.5px;
+    color: var(--muted);
+    background: var(--paper);
+  }
+
+  .file-preview {
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    background: var(--paper-3);
+    aspect-ratio: 16 / 9;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  }
+
+  .file-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+    display: block;
+    transition: transform .3s ease;
+  }
+
+  .file-row:hover .file-preview img { transform: scale(1.03); }
+
+  /* ================= ABOUT / STACK MANIFEST ================= */
+
+  .about-grid {
+    margin-top: 36px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: start;
+  }
+
+  .about-text { font-size: clamp(16px, 2vw, 19px); line-height: 1.6; color: var(--muted); }
+  .about-text strong { color: var(--ink); }
+
+  .manifest {
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 20px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12.5px;
+    line-height: 1.8;
+    overflow-x: auto;
+  }
+
+  .manifest .file-title { color: var(--muted); opacity: .7; margin-bottom: 10px; }
+  .manifest .key { color: #9FE870; }
+  .manifest .str { color: #FFD08A; }
+  .manifest .punc { color: rgba(240,243,236,.4); }
+
+  /* ================= CONTACT ================= */
+
+  .contact-box {
+    padding: 20px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: var(--paper-2);
+    overflow: hidden;
+  }
+
+  .terminal-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--line);
+    margin: -20px -20px 0;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .terminal-bar .dots { display: flex; gap: 5px; }
+  .terminal-bar .dots i { width: 8px; height: 8px; border-radius: 50%; background: var(--paper-3); display: block; }
+
+  .contact-inner { padding: 40px 24px 30px; }
+
+  .contact-box h2 {
+    max-width: 700px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: clamp(28px, 4.6vw, 52px);
+    line-height: 1.08;
+    letter-spacing: -.03em;
+  }
+
+  .contact-box p {
+    max-width: 520px;
+    margin-top: 16px;
+    color: var(--muted);
+    line-height: 1.6;
+    font-size: 15px;
+  }
+
+  .contact-prompt {
+    margin-top: 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .contact-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 14px;
+    flex-wrap: wrap;
+  }
+
+  .contact-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 18px;
+    border-radius: 8px;
+    background: var(--accent);
+    color: #FFF;
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 600;
+    font-size: 13.5px;
+    border: none;
+    cursor: pointer;
+    transition: .25s;
+  }
+
+  .contact-button:hover { transform: translateY(-3px); opacity: .9; }
+
+  /* ================= OVERLAY CLI TERMINAL ================= */
+
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: rgba(0,0,0,.6);
+    backdrop-filter: blur(5px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .25s ease;
+    padding: 16px;
+  }
+
+  .modal-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .cli-window {
+    width: min(720px, 100%);
+    height: 400px;
+    max-height: 80vh;
+    background: var(--terminal-bg);
+    color: var(--terminal-txt);
+    border-radius: 12px;
+    border: 1px solid var(--line);
+    box-shadow: 0 24px 48px rgba(0,0,0,.4);
+    display: flex;
+    flex-direction: column;
+    font-family: "JetBrains Mono", monospace;
+    overflow: hidden;
+  }
+
+  .cli-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    background: rgba(255,255,255,.05);
+    border-bottom: 1px solid rgba(255,255,255,.1);
+    font-size: 11.5px;
+  }
+
+  .cli-body {
+    flex: 1;
+    padding: 14px;
+    overflow-y: auto;
+    font-size: 12.5px;
+    line-height: 1.6;
+  }
+
+  .cli-input-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+  }
+
+  .cli-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: inherit;
+    font-family: inherit;
+    font-size: inherit;
+    outline: none;
+  }
+
+  /* ================= FOOTER ================= */
+
+  footer {
+    width: min(1160px, calc(100% - 40px));
+    margin: auto;
+    padding: 26px 0 40px;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11.5px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  /* REVEAL ANIMATION SAFE-GUARD */
+  .reveal { 
+    opacity: 0; 
+    transform: translateY(24px); 
+    transition: opacity .7s ease, transform .7s cubic-bezier(.2,.8,.2,1); 
+  }
+  .reveal.visible { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+
+  /* ================= RESPONSIVE BREAKPOINTS ================= */
+
+  @media (max-width: 900px) {
+    .hero { min-height: auto; padding-top: 110px; }
+    .hero-container { grid-template-columns: 1fr; gap: 40px; }
+    .id-area { justify-content: flex-start; }
+    .id-card { width: 100%; max-width: 320px; }
+    .about-grid { grid-template-columns: 1fr; gap: 30px; }
+    .file-content { grid-template-columns: 1fr; gap: 16px; }
+    .file-preview { order: -1; } /* Превью над описанием для смартфонов */
+  }
+
+  @media (max-width: 768px) {
+    .nav-links { display: none; } /* Скрываем текстовые ссылки меню на экранах мобилок */
+    
+    .status { display: none; } /* Скрываем статус для освобождения места в шапке */
+    
+    .nav {
+      padding: 8px 12px;
+    }
+
+    .nav-right {
+      overflow-x: auto;
+      white-space: nowrap;
+      padding-bottom: 2px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .nav-right::-webkit-scrollbar { display: none; }
+  }
+
+  @media (max-width: 520px) {
+    body { background-size: 32px 32px; }
+    
+    .hero { padding: 100px 16px 60px; }
+    .buttons { flex-direction: column; width: 100%; }
+    .button { width: 100%; }
+
+    section:not(.hero) { padding: 60px 16px; }
+    .file-row { padding: 16px 14px; }
+    .file-name { font-size: 15px; }
+
+    .contact-inner { padding: 28px 16px 24px; }
+    .contact-actions { flex-direction: column; width: 100%; }
+    .contact-button { width: 100%; }
+
+    footer {
+      flex-direction: column;
+      gap: 8px;
+      text-align: center;
+    }
+  }
+</style>
+</head>
+<body>
+
+  <nav class="nav">
+    <a href="#" class="logo">akshin<span>.dev</span></a>
+    
+    <div class="nav-right">
+      <div class="nav-links">
+        <a href="#work" data-i18n="nav_work">проекты</a>
+        <a href="#about" data-i18n="nav_about">о себе</a>
+        <a href="#contact" data-i18n="nav_contact">контакты</a>
+      </div>
+
+      <!-- Переключатель языка -->
+      <div class="control-group">
+        <button class="ctrl-btn lang-btn active" onclick="setLanguage('ru')">RU</button>
+        <button class="ctrl-btn lang-btn" onclick="setLanguage('en')">EN</button>
+      </div>
+
+      <!-- Переключатель темы -->
+      <div class="control-group">
+        <button class="ctrl-btn" id="themeBtn" onclick="toggleTheme()" title="Сменить тему">☀️</button>
+      </div>
+
+      <!-- Переключатель звука -->
+      <div class="control-group">
+        <button class="ctrl-btn" id="soundBtn" onclick="toggleSound()" title="Звуковой отклик">🔇</button>
+      </div>
+
+      <!-- Кнопка терминала -->
+      <button class="ctrl-btn" onclick="openTerminal()" style="padding: 4px 8px; border:1px solid var(--line); border-radius:5px;" title="CLI Консоль (Ctrl+K)">>_ CLI</button>
+
+      <div class="status">
+        <span class="status-dot"></span>
+        <span data-i18n="status_text">открыт к предложениям</span>
+      </div>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-container">
+
+      <div class="reveal">
+        <div class="eyebrow">
+          <span class="status-dot"></span>
+          <span data-i18n="hero_eyebrow">// full-stack developer — баку, азербайджан</span>
+        </div>
+
+        <h1 data-i18n="hero_title">
+          Разрабатываю веб-сервисы,<br>
+          которые <em>работают</em><span class="cursor"></span>
+        </h1>
+
+        <p class="hero-description" data-i18n="hero_desc">
+          Я Акшин. Создаю веб-приложения под ключ — архитектура баз данных, бэкенд и удобный интерфейс. Также создаю инструменты автоматизации и Telegram-ботов, которые бережно закрывают рутину.
+        </p>
+
+        <div class="buttons">
+          <a href="#work" class="button button-primary" data-i18n="hero_btn_work">смотреть проекты →</a>
+          <button onclick="copyEmail(this)" class="button" data-i18n="hero_btn_copy">скопировать email</button>
+        </div>
+      </div>
+
+      <div class="id-area reveal">
+        <div class="id-card" id="idCard">
+          <span class="id-corner tl"></span>
+          <span class="id-corner tr"></span>
+          <span class="id-corner bl"></span>
+          <span class="id-corner br"></span>
+
+          <div class="id-photo">
+            <img src="assets/portrait.png" alt="Akshin Gadimov">
+          </div>
+
+          <div class="id-plate">
+            <div class="id-row"><span data-i18n="id_name_label">имя</span><b>Акшин Гадимов</b></div>
+            <div class="id-row"><span data-i18n="id_role_label">роль</span><b>Full-Stack Dev</b></div>
+            <div class="id-row"><span data-i18n="id_location_label">город</span><b data-i18n="id_location_val">Баку, Азербайджан</b></div>
+            <div class="id-row"><span data-i18n="id_status_label">статус</span><b class="accent-val" data-i18n="id_status_val">доступен</b></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="ticker">
+    <div class="ticker-track">
+      <span>React</span><b>//</b>
+      <span>Next.js</span><b>//</b>
+      <span>TypeScript</span><b>//</b>
+      <span>Node.js</span><b>//</b>
+      <span>PostgreSQL</span><b>//</b>
+      <span>Tailwind CSS</span><b>//</b>
+      <span>React</span><b>//</b>
+      <span>Next.js</span><b>//</b>
+      <span>TypeScript</span><b>//</b>
+      <span>Node.js</span><b>//</b>
+      <span>PostgreSQL</span><b>//</b>
+      <span>Tailwind CSS</span><b>//</b>
+    </div>
+  </div>
+
+  <section id="work">
+    <div class="container">
+      <div class="reveal">
+        <div class="section-label" data-i18n="work_label">// избранные проекты</div>
+        <h2 class="section-title" data-i18n="work_title">Что я сделал.</h2>
+      </div>
+
+      <div class="tree reveal">
+        <div class="tree-head">
+          <span class="dots"><i></i><i></i><i></i></span>
+          ~/akshin/projects
+        </div>
+
+        <a href="https://akshin013.github.io/SushiSite/" target="_blank" class="file-row">
+          <div class="file-head">
+            <span class="file-branch">└──</span>
+            <span class="file-name">hikari-sushi.tsx</span>
+            <span class="file-badge live">live</span>
+            <span class="file-link-arrow">↗</span>
+          </div>
+
+          <div class="file-content">
+            <div class="file-info">
+              <p class="file-desc" data-i18n="project_hikari_desc">
+                Hikari — современное веб-приложение для суши-бара. Реализовано с премиальным темным дизайном, интерактивным меню, мультиязычностью (AZ/RU) и полной адаптивностью.
+              </p>
+              <div class="file-tags">
+                <span class="file-tag">JavaScript</span>
+                <span class="file-tag">HTML5 / CSS3</span>
+                <span class="file-tag">UI/UX Design</span>
+                <span class="file-tag">GitHub Pages</span>
+              </div>
+            </div>
+
+            <div class="file-preview">
+              <img src="assets/hikari.png" alt="Hikari Sushi Bar Preview">
+            </div>
+          </div>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="container">
+      <div class="reveal">
+        <div class="section-label" data-i18n="about_label">// о себе</div>
+        <h2 class="section-title" data-i18n="about_title">Как я строю.</h2>
+      </div>
+
+      <div class="about-grid">
+        <div class="about-text reveal" data-i18n="about_text">
+          Для меня важна грань между <strong>«работает»</strong> и <strong>«приятно пользоваться».</strong><br><br>
+          Это означает чистую архитектуру внутри, продуманные интерфейсы снаружи и внимание к детализации, чтобы всё работало быстро и отзывчиво.
+        </div>
+
+        <div class="manifest reveal">
+          <div class="file-title">// stack.json</div>
+          <div><span class="punc">{</span></div>
+          <div>&nbsp;&nbsp;<span class="key">"frontend"</span><span class="punc">:</span> <span class="str">["React", "Next.js", "TypeScript", "Tailwind CSS"]</span><span class="punc">,</span></div>
+          <div>&nbsp;&nbsp;<span class="key">"backend"</span><span class="punc">:</span> <span class="str">["Node.js", "Express", "PostgreSQL", "Supabase"]</span><span class="punc">,</span></div>
+          <div>&nbsp;&nbsp;<span class="key">"tooling"</span><span class="punc">:</span> <span class="str">["Cloudinary", "Git", "Figma", "Vercel"]</span></div>
+          <div><span class="punc">}</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="container">
+      <div class="contact-box reveal">
+        <div class="terminal-bar">
+          <span class="dots"><i></i><i></i><i></i></span>
+          ~/contact — zsh
+        </div>
+        <div class="contact-inner">
+          <div class="section-label" data-i18n="contact_label">// контакты</div>
+          <h2 data-i18n="contact_title">Есть идея<br>проекта?</h2>
+          <p data-i18n="contact_desc">
+            Сайт, продукт, дашборд или экспериментальная задача — напишите мне, что планируете создать, и обсудим детали.
+          </p>
+          <div class="contact-prompt">$ open mail --to akshin</div>
+          
+          <div class="contact-actions">
+            <a href="mailto:akshingadimov@gmail.com" class="contact-button" data-i18n="contact_btn_send">написать письмо →</a>
+            <button onclick="copyEmail(this)" class="contact-button" style="background:var(--ink); color:var(--paper);" data-i18n="contact_btn_copy">скопировать email</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>© 2026 Akshin Gadimov</span>
+    <span data-i18n="footer_built">сделано в Баку</span>
+  </footer>
+
+  <!-- CLI MODAL -->
+  <div class="modal-overlay" id="cliModal" onclick="closeTerminalOnClickOutside(event)">
+    <div class="cli-window">
+      <div class="cli-head">
+        <span>akshin@dev-box:~ (zsh)</span>
+        <span style="cursor:pointer;" onclick="closeTerminal()">[ESC / ✕]</span>
+      </div>
+      <div class="cli-body" id="cliBody">
+        <div>Добро пожаловать в CLI портфолио! Введите <span style="color:var(--accent)">'help'</span> для списка команд.</div>
+        <div class="cli-input-row">
+          <span>&gt;</span>
+          <input type="text" class="cli-input" id="cliInput" autofocus>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* ================= MULTI-LANGUAGE SYSTEM ================= */
+    const translations = {
+      ru: {
+        nav_work: "проекты",
+        nav_about: "о себе",
+        nav_contact: "контакты",
+        status_text: "open_to_work",
+        hero_eyebrow: "// full-stack developer — баку, азербайджан",
+        hero_title: 'Разрабатываю веб-сервисы,<br>которые <em>работают</em><span class="cursor"></span>',
+        hero_desc: "Я Акшин. Создаю веб-приложения под ключ — архитектура баз данных, бэкенд и удобный интерфейс. Также создаю инструменты автоматизации и Telegram-ботов, которые бережно закрывают рутину.",
+        hero_btn_work: "смотреть проекты →",
+        hero_btn_copy: "скопировать email",
+        id_name_label: "имя",
+        id_role_label: "роль",
+        id_location_label: "город",
+        id_location_val: "Баку, Азербайджан",
+        id_status_label: "статус",
+        id_status_val: "доступен",
+        work_label: "// избранные проекты",
+        work_title: "Что я сделал.",
+        project_hikari_desc: "Hikari — современное веб-приложение для суши-бара. Реализовано с премиальным темным дизайном, интерактивным меню, мультиязычностью (AZ/RU) и полной адаптивностью.",
+        about_label: "// о себе",
+        about_title: "Как я строю.",
+        about_text: 'Для меня важна грань между <strong>«работает»</strong> и <strong>«приятно пользоваться».</strong><br><br>Это означает чистую архитектуру внутри, продуманные интерфейсы снаружи и внимание к детализации, чтобы всё работало быстро и отзывчиво.',
+        contact_label: "// контакты",
+        contact_title: 'Есть идея<br>проекта?',
+        contact_desc: "Сайт, продукт, дашборд или экспериментальная задача — напишите мне, что планируете создать, и обсудим детали.",
+        contact_btn_send: "написать письмо →",
+        contact_btn_copy: "скопировать email",
+        footer_built: "сделано в Баку"
+      },
+      en: {
+        nav_work: "work",
+        nav_about: "about",
+        nav_contact: "contact",
+        status_text: "open_to_work",
+        hero_eyebrow: "// full-stack developer — baku, az",
+        hero_title: 'Building software<br>that actually <em>ships</em><span class="cursor"></span>',
+        hero_desc: "I'm Akshin. I build web apps end to end — database schema, backend, and the interface on top of it. Recently: automation tools and Telegram bots that quietly do the boring work.",
+        hero_btn_work: "view work →",
+        hero_btn_copy: "copy email",
+        id_name_label: "name",
+        id_role_label: "role",
+        id_location_label: "based",
+        id_location_val: "Baku, AZ",
+        id_status_label: "status",
+        id_status_val: "available",
+        work_label: "// selected work",
+        work_title: "Things I've built.",
+        project_hikari_desc: "Hikari — modern Japanese sushi bar web application. Built with a sleek dark aesthetic, dynamic menu presentation, multi-language support (AZ/RU), and full mobile responsiveness.",
+        about_label: "// about",
+        about_title: "How I build.",
+        about_text: 'I care about the space between <strong>"it works"</strong> and <strong>"it feels right."</strong><br><br>That means clean architecture underneath, thoughtful interfaces on top, and enough attention to performance and motion that nobody has to think about either.',
+        contact_label: "// get in touch",
+        contact_title: 'Have a project<br>in mind?',
+        contact_desc: "Website, product, dashboard, or something a little experimental — tell me what you're building and let's see if it's a fit.",
+        contact_btn_send: "say hello →",
+        contact_btn_copy: "copy email",
+        footer_built: "designed & built in Baku"
+      }
+    };
+
+    function setLanguage(lang) {
+      playSound(600, 0.03);
+      document.documentElement.lang = lang;
+      localStorage.setItem('preferred_lang', lang);
+
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.textContent.toLowerCase() === lang);
+      });
+
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (translations[lang] && translations[lang][key]) {
+          el.innerHTML = translations[lang][key];
+        }
+      });
+    }
+
+    /* ================= THEME TOGGLE ================= */
+    function toggleTheme() {
+      playSound(400, 0.05);
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      const newTheme = isDark ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('preferred_theme', newTheme);
+      document.getElementById('themeBtn').textContent = newTheme === 'dark' ? '🌙' : '☀️';
+    }
+
+    /* ================= SOUND DESIGN (Web Audio API) ================= */
+    let soundEnabled = false;
+    let audioCtx = null;
+
+    function toggleSound() {
+      soundEnabled = !soundEnabled;
+      document.getElementById('soundBtn').textContent = soundEnabled ? '🔊' : '🔇';
+      if (soundEnabled) playSound(800, 0.05);
+    }
+
+    function playSound(freq = 500, duration = 0.05) {
+      if (!soundEnabled) return;
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+      gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + duration);
+    }
+
+    /* ================= COPY EMAIL ================= */
+    function copyEmail(btnElement) {
+      playSound(700, 0.04);
+      const email = "akshingadimov@gmail.com";
+      navigator.clipboard.writeText(email).then(() => {
+        const originalText = btnElement.innerText;
+        const isRu = document.documentElement.lang === 'ru';
+        btnElement.innerText = isRu ? '✓ скопировано!' : '✓ copied!';
+        btnElement.style.background = '#9FE870';
+        btnElement.style.color = '#12140F';
+
+        setTimeout(() => {
+          btnElement.innerText = originalText;
+          btnElement.style.background = '';
+          btnElement.style.color = '';
+        }, 2200);
+      });
+    }
+
+    /* ================= CLI TERMINAL ================= */
+    const cliModal = document.getElementById('cliModal');
+    const cliInput = document.getElementById('cliInput');
+    const cliBody = document.getElementById('cliBody');
+
+    function openTerminal() {
+      playSound(520, 0.04);
+      cliModal.classList.add('open');
+      cliInput.focus();
+    }
+
+    function closeTerminal() {
+      cliModal.classList.remove('open');
+    }
+
+    function closeTerminalOnClickOutside(e) {
+      if (e.target === cliModal) closeTerminal();
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        cliModal.classList.contains('open') ? closeTerminal() : openTerminal();
+      }
+      if (e.key === 'Escape' && cliModal.classList.contains('open')) {
+        closeTerminal();
+      }
+    });
+
+    cliInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        const cmd = cliInput.value.trim().toLowerCase();
+        cliInput.value = '';
+        if (!cmd) return;
+
+        playSound(350, 0.02);
+        
+        const inputRow = document.createElement('div');
+        inputRow.innerHTML = `<span style="opacity:.6;">&gt; ${cmd}</span>`;
+        cliBody.insertBefore(inputRow, cliInput.parentElement);
+
+        const responseRow = document.createElement('div');
+        responseRow.style.marginBottom = "8px";
+
+        switch (cmd) {
+          case 'help':
+            responseRow.innerHTML = `Доступные команды: <br> • <b>skills</b> — стек технологий<br> • <b>projects</b> — проекты<br> • <b>contact</b> — способы связи<br> • <b>clear</b> — очистить консоль<br> • <b>matrix</b> — секрет`;
+            break;
+          case 'skills':
+            responseRow.innerHTML = `Frontend: React, Next.js, TypeScript, Tailwind<br>Backend: Node.js, Express, PostgreSQL, Supabase, Python`;
+            break;
+          case 'projects':
+            responseRow.innerHTML = `1. Hikari Sushi Bar (Live Web App)`;
+            break;
+          case 'contact':
+            responseRow.innerHTML = `Email: akshingadimov@gmail.com | Telegram / GitHub`;
+            break;
+          case 'clear':
+            const rows = cliBody.querySelectorAll('div:not(.cli-input-row)');
+            rows.forEach(r => r.remove());
+            return;
+          case 'matrix':
+            responseRow.style.color = '#9FE870';
+            responseRow.innerHTML = `Wake up, Neo... The Matrix has you. Follow the white rabbit. 🐇`;
+            break;
+          default:
+            responseRow.innerHTML = `<span style="color:var(--accent)">Команда не найдена: ${cmd}. Введите 'help'.</span>`;
+        }
+
+        cliBody.insertBefore(responseRow, cliInput.parentElement);
+        cliBody.scrollTop = cliBody.scrollHeight;
+      }
+    });
+
+    /* ================= DEVTOOLS EASTER EGG ================= */
+    console.log(
+      "%c Привет! 🚀 Ищешь Full-Stack разработчика в команду? Напиши мне: akshingadimov@gmail.com ",
+      "background: #FF4A1C; color: #fff; font-size: 13px; font-weight: bold; padding: 8px 12px; border-radius: 4px;"
+    );
+
+    /* ================= INITIALIZATION & REVEAL SAFEGUARD ================= */
+    document.addEventListener("DOMContentLoaded", () => {
+      // Инициализация языка и темы
+      const savedLang = localStorage.getItem('preferred_lang') || 'ru';
+      setLanguage(savedLang);
+
+      const savedTheme = localStorage.getItem('preferred_theme') || 'light';
+      if (savedTheme === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        document.getElementById('themeBtn').textContent = '🌙';
+      }
+
+      // 3D Карточка (только на десктопах с мышь-управлением)
+      const card = document.getElementById("idCard");
+      const idArea = document.querySelector(".id-area");
+
+      if (idArea && card && window.matchMedia("(hover: hover)").matches) {
+        idArea.addEventListener("mousemove", (event) => {
+          const rect = card.getBoundingClientRect();
+          const x = event.clientX - rect.left;
+          const y = event.clientY - rect.top;
+          const centerX = rect.width / 2;
+          const centerY = rect.height / 2;
+
+          const rotateY = ((x - centerX) / centerX) * 8;
+          const rotateX = ((centerY - y) / centerY) * 8;
+          const moveX = ((x - centerX) / centerX) * 6;
+          const moveY = ((y - centerY) / centerY) * 6;
+
+          card.style.transform = `
+            translate(${moveX}px, ${moveY}px)
+            rotateX(${rotateX}deg)
+            rotateY(${rotateY}deg)
+          `;
+        });
+
+        idArea.addEventListener("mouseleave", () => {
+          card.style.transform = "translate(0,0) rotateX(0deg) rotateY(0deg)";
+        });
+      }
+
+      // Инициализация отображения элементов (Scroll Reveal)
+      const elements = document.querySelectorAll(".reveal");
+      if ("IntersectionObserver" in window) {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("visible");
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.05 });
+
+        elements.forEach((el) => observer.observe(el));
+      } else {
+        elements.forEach((el) => el.classList.add("visible"));
+      }
+    });
+  </script>
+
+</body>
+</html>
