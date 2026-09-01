@@ -628,6 +628,20 @@
 
   .contact-button:hover { transform: translateY(-3px); opacity: .9; }
 
+  /* Состояние успешного копирования */
+  .copy-success {
+    background: #2E9B58 !important;
+    border-color: #2E9B58 !important;
+    color: #fff !important;
+    transform: translateY(-2px);
+  }
+
+  .copy-success:hover {
+    background: #2E9B58 !important;
+    border-color: #2E9B58 !important;
+    opacity: .92;
+  }
+
   /* ================= OVERLAY CLI TERMINAL ================= */
 
   .modal-overlay {
@@ -1154,59 +1168,168 @@
     /* ================= AUDIO SYSTEM ================= */
     let soundEnabled = false;
     let audioCtx = null;
+    let masterGain = null;
 
     function initAudio() {
-      if (!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      }
-      if (audioCtx.state === 'suspended') {
-        audioCtx.resume();
+      try {
+        if (!audioCtx) {
+          const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+          if (!AudioContextClass) return false;
+          audioCtx = new AudioContextClass();
+          masterGain = audioCtx.createGain();
+          masterGain.gain.value = 0.75;
+          masterGain.connect(audioCtx.destination);
+        }
+
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume().catch(() => {});
+        }
+        return true;
+      } catch (e) {
+        console.warn('[audio] init error:', e);
+        return false;
       }
     }
 
-    function playKeySound() {
-      if (!soundEnabled) return;
-      initAudio();
+    function playTone(freq = 520, duration = 0.055, type = 'sine', volume = 0.08, endFreq = null) {
+      if (!soundEnabled || !initAudio()) return;
+
       try {
+        const now = audioCtx.currentTime;
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(600, audioCtx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(120, audioCtx.currentTime + 0.05);
-        gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
-        gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.05);
+
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, now);
+
+        if (endFreq) {
+          osc.frequency.exponentialRampToValueAtTime(Math.max(20, endFreq), now + duration);
+        }
+
+        gain.gain.setValueAtTime(0.0001, now);
+        gain.gain.exponentialRampToValueAtTime(Math.max(0.0001, volume), now + 0.008);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+
         osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start();
-        osc.stop(audioCtx.currentTime + 0.05);
-      } catch (e) {}
+        gain.connect(masterGain);
+        osc.start(now);
+        osc.stop(now + duration + 0.01);
+      } catch (e) {
+        console.warn('[audio] tone error:', e);
+      }
+    }
+
+    function playHoverSound() {
+      playTone(900, 0.035, 'sine', 0.025, 760);
+    }
+
+    function playClickSound() {
+      playTone(560, 0.055, 'sine', 0.055, 360);
+    }
+
+    function playKeySound() {
+      playTone(600, 0.05, 'sine', 0.07, 120);
+    }
+
+    function playSuccessSound() {
+      if (!soundEnabled || !initAudio()) return;
+      playTone(660, 0.07, 'sine', 0.055, 760);
+      setTimeout(() => playTone(880, 0.10, 'sine', 0.05, 1040), 55);
+    }
+
+    function playOpenSound() {
+      playTone(320, 0.08, 'sine', 0.05, 620);
+    }
+
+    function playCloseSound() {
+      playTone(620, 0.08, 'sine', 0.045, 300);
     }
 
     function toggleSound() {
       soundEnabled = !soundEnabled;
       const btn = document.getElementById('soundBtn');
-      btn.textContent = soundEnabled ? '🔊' : '🔇';
+
       if (soundEnabled) {
         initAudio();
-        playKeySound();
+        btn.textContent = '🔊';
+        btn.classList.add('active');
+        playSuccessSound();
+      } else {
+        btn.textContent = '🔇';
+        btn.classList.remove('active');
       }
     }
 
-    // Разблокировка звука на мобильных по первому тапу
-    window.addEventListener('touchstart', () => {
+    // Разблокировка Web Audio после первого реального действия пользователя.
+    // Это важно для Chrome / Safari / мобильных браузеров.
+    function unlockAudio() {
       if (audioCtx && audioCtx.state === 'suspended') {
-        audioCtx.resume();
+        audioCtx.resume().catch(() => {});
       }
-    }, { once: true });
+    }
+
+    window.addEventListener('pointerdown', unlockAudio, { passive: true });
+    window.addEventListener('touchstart', unlockAudio, { passive: true });
+    window.addEventListener('keydown', unlockAudio);
+
+    // Звуки интерфейса: клики и наведение.
+    document.addEventListener('pointerover', (e) => {
+      const el = e.target.closest('a, button, .ctrl-btn, .ticker-item, .file-row');
+      if (!el || el.dataset.soundHoverPlayed === '1') return;
+      el.dataset.soundHoverPlayed = '1';
+      playHoverSound();
+    });
+
+    document.addEventListener('pointerout', (e) => {
+      const el = e.target.closest('a, button, .ctrl-btn, .ticker-item, .file-row');
+      if (el) delete el.dataset.soundHoverPlayed;
+    });
+
+    document.addEventListener('click', (e) => {
+      const el = e.target.closest('a, button, .ctrl-btn, .ticker-item, .file-row');
+      if (!el || el.id === 'soundBtn') return;
+      playClickSound();
+    }, true);
 
     /* ================= COPY EMAIL ================= */
-    function copyEmail(btn) {
-      navigator.clipboard.writeText('akshingadimov@gmail.com');
+/* ================= COPY EMAIL ================= */
+    async function copyEmail(btn) {
+      const email = 'akshingadimov@gmail.com';
       const originalText = btn.textContent;
-      btn.textContent = currentLang === 'ru' ? 'скопировано! ✓' : 'copied! ✓';
-      setTimeout(() => {
-        btn.textContent = originalText;
-      }, 2000);
+
+      try {
+        // Основной способ
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(email);
+        } else {
+          // Fallback для file:// и старых браузеров
+          const textarea = document.createElement('textarea');
+          textarea.value = email;
+          textarea.style.position = 'fixed';
+          textarea.style.opacity = '0';
+          document.body.appendChild(textarea);
+          textarea.focus();
+          textarea.select();
+          document.execCommand('copy');
+          textarea.remove();
+        }
+
+        btn.textContent = currentLang === 'ru' ? 'скопировано! ✓' : 'copied! ✓';
+        btn.classList.add('copy-success');
+        playSuccessSound();
+
+        clearTimeout(btn._copyTimer);
+        btn._copyTimer = setTimeout(() => {
+          btn.textContent = originalText;
+          btn.classList.remove('copy-success');
+        }, 2000);
+      } catch (error) {
+        console.error('[copy-email] error:', error);
+        btn.textContent = currentLang === 'ru' ? 'ошибка копирования' : 'copy failed';
+        setTimeout(() => {
+          btn.textContent = originalText;
+        }, 2000);
+      }
     }
 
     /* ================= ID CARD 3D EFFECT ================= */
@@ -1229,11 +1352,14 @@
     const cliBody = document.getElementById('cliBody');
 
     function openTerminal() {
+      initAudio();
+      playOpenSound();
       cliModal.classList.add('open');
       setTimeout(() => cliInput.focus(), 50);
     }
 
     function closeTerminal() {
+      playCloseSound();
       cliModal.classList.remove('open');
     }
 
@@ -1252,7 +1378,14 @@
     });
 
     cliInput.addEventListener('keydown', (e) => {
-      playKeySound();
+      // Каждый символ/клавиша в консоли получает отдельный звук.
+      if (e.key === 'Enter') {
+        playSuccessSound();
+      } else if (e.key === 'Backspace' || e.key === 'Delete') {
+        playTone(420, 0.045, 'sine', 0.045, 180);
+      } else if (e.key.length === 1) {
+        playKeySound();
+      }
       if (e.key === 'Enter') {
         const val = cliInput.value.trim().toLowerCase();
         const cmdRow = document.createElement('div');
