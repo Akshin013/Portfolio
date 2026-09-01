@@ -933,7 +933,7 @@
         <!-- Новый проект Herakl Gym -->
         <a href="https://akshin013.github.io/HeraklGym/" target="_blank" class="file-row">
           <div class="file-head">
-            <span class="file-branch">└──</span>
+            <span class="file-branch">├──</span>
             <span class="file-name">herakl-gym.tsx</span>
             <span class="file-badge live">live</span>
             <span class="file-link-arrow">↗</span>
@@ -954,6 +954,34 @@
 
             <div class="file-preview">
               <img src="./herakl.png" alt="Herakl Gym Preview">
+            </div>
+          </div>
+        </a>
+
+        <!-- Новый проект Coca-Cola -->
+        <a href="https://akshin013.github.io/CocaCola/" target="_blank" class="file-row">
+          <div class="file-head">
+            <span class="file-branch">└──</span>
+            <span class="file-name">coca-cola.tsx</span>
+            <span class="file-badge live">live</span>
+            <span class="file-link-arrow">↗</span>
+          </div>
+
+          <div class="file-content">
+            <div class="file-info">
+              <p class="file-desc" data-i18n="project_cocacola_desc">
+                Coca-Cola — концептуальный лендинг с кинематографичной анимацией на скролле, 3D-эффектами и продуманной адаптивной версткой под мобильные устройства.
+              </p>
+              <div class="file-tags">
+                <span class="file-tag">JavaScript</span>
+                <span class="file-tag">HTML5 / CSS3</span>
+                <span class="file-tag">Scroll Animation</span>
+                <span class="file-tag">GitHub Pages</span>
+              </div>
+            </div>
+
+            <div class="file-preview">
+              <img src="./cola.png" alt="Coca-Cola Landing Preview">
             </div>
           </div>
         </a>
@@ -1056,6 +1084,7 @@
         work_title: "Что я сделал.",
         project_hikari_desc: "Hikari — современное веб-приложение для суши-бара. Реализовано с премиальным темным дизайном, интерактивным меню, мультиязычностью (AZ/RU) и полной адаптивностью.",
         project_herakl_desc: "Herakl Gym — современный коммерческий веб-сайт фитнес-зала в Баку с удобным выбором филиалов, интерактивными картами и выбором абонементов.",
+        project_cocacola_desc: "Coca-Cola — концептуальный лендинг с кинематографичной анимацией на скролле, 3D-эффектами и продуманной адаптивной версткой под мобильные устройства.",
         about_label: "// о себе",
         about_title: "Как я строю.",
         about_text: 'Для меня важна грань между <strong>«работает»</strong> и <strong>«приятно пользоваться».</strong><br><br>Это означает чистую архитектуру внутри, продуманные интерфейсы снаружи и внимание к детализации, чтобы всё работало быстро и отзывчиво.',
@@ -1086,6 +1115,7 @@
         work_title: "What I've built.",
         project_hikari_desc: "Hikari is a modern sushi bar web application featuring a sleek dark theme, interactive menu, multi-language support (AZ/RU), and full responsiveness.",
         project_herakl_desc: "Herakl Gym is a modern commercial fitness club website in Baku featuring branch selection, interactive maps, and membership plans.",
+        project_cocacola_desc: "Coca-Cola is a concept landing page with cinematic scroll-driven animation, 3D effects, and a carefully tuned mobile-responsive layout.",
         about_label: "// about",
         about_title: "How I build.",
         about_text: 'I care about the border between <strong>"works"</strong> and <strong>"feels great to use."</strong><br><br>This means clean internal architecture, well-thought-out interfaces, and keen attention to detail.',
@@ -1235,7 +1265,7 @@
         if (val === 'help') {
           respRow.innerHTML = 'Доступные команды: <br>- <b>projects</b>: список проектов<br>- <b>about</b>: информация обо мне<br>- <b>contact</b>: связаться<br>- <b>clear</b>: очистить терминал<br>- <b>exit</b>: закрыть консоль';
         } else if (val === 'projects') {
-          respRow.innerHTML = '1. Hikari Sushi (https://akshin013.github.io/SushiSite/)<br>2. Herakl Gym (https://akshin013.github.io/HeraklGym/)';
+          respRow.innerHTML = '1. Hikari Sushi (https://akshin013.github.io/SushiSite/)<br>2. Herakl Gym (https://akshin013.github.io/HeraklGym/)<br>3. Coca-Cola (https://akshin013.github.io/CocaCola/)';
         } else if (val === 'about') {
           respRow.innerHTML = 'Junior Full-Stack Developer из Баку, Азербайджан.';
         } else if (val === 'contact') {
