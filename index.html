@@ -1000,6 +1000,35 @@
           </div>
         </a>
 
+                <!-- Новый проект SaytDemo -->
+        <a href="https://akshin013.github.io/SaytDemo/" target="_blank" class="file-row">
+          <div class="file-head">
+            <span class="file-branch">└──</span>
+            <span class="file-name">saytdemo.tsx</span>
+            <span class="file-badge live">live</span>
+            <span class="file-link-arrow">↗</span>
+          </div>
+
+          <div class="file-content">
+            <div class="file-info">
+              <p class="file-desc">
+                SaytDemo — современный веб-сайт с адаптивным дизайном и удобным пользовательским интерфейсом.
+              </p>
+              <div class="file-tags">
+                <span class="file-tag">JavaScript</span>
+                <span class="file-tag">HTML5 / CSS3</span>
+                <span class="file-tag">Responsive Design</span>
+                <span class="file-tag">GitHub Pages</span>
+              </div>
+            </div>
+
+            <div class="file-preview">
+              <img src="./avto.png" alt="SaytDemo Preview">
+            </div>
+          </div>
+        </a>
+
+
       </div>
     </div>
   </section>
@@ -1398,41 +1427,41 @@
         if (val === 'help') {
           respRow.innerHTML = 'Доступные команды: <br>- <b>projects</b>: список проектов<br>- <b>about</b>: информация обо мне<br>- <b>contact</b>: связаться<br>- <b>clear</b>: очистить терминал<br>- <b>exit</b>: закрыть консоль';
         } else if (val === 'projects') {
-          respRow.innerHTML = '1. Hikari Sushi (https://akshin013.github.io/SushiSite/)<br>2. Herakl Gym (https://akshin013.github.io/HeraklGym/)<br>3. Coca-Cola (https://akshin013.github.io/CocaCola/)';
-        } else if (val === 'about') {
-          respRow.innerHTML = 'Junior Full-Stack Developer из Баку, Азербайджан.';
-        } else if (val === 'contact') {
-          respRow.innerHTML = 'Email: akshingadimov@gmail.com';
-        } else if (val === 'clear') {
-          cliBody.querySelectorAll('div:not(.cli-input-row)').forEach(el => el.remove());
-          cliInput.value = '';
-          return;
-        } else if (val === 'exit') {
-          closeTerminal();
-          cliInput.value = '';
-          return;
-        } else if (val === '') {
-          respRow.innerHTML = '';
-        } else {
-          respRow.innerHTML = `Команда не найдена: ${val}. Введите 'help' для справки.`;
-        }
-
-        cliBody.insertBefore(respRow, cliInput.parentElement);
-        cliInput.value = '';
-        cliBody.scrollTop = cliBody.scrollHeight;
-      }
-    });
-
-    /* ================= REVEAL ON SCROLL ================= */
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-        }
-      });
-    }, { threshold: 0.1 });
-
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-  </script>
-</body>
+          respRow.innerHTML = '1. Hikari Sushi (https://akshin013.github.io/SushiSite/)<br>2. Herakl Gym (https://akshin013.github.io/HeraklGym/)<br>3. Coca-Cola (https://akshin013.github.io/CocaCola/)'; 
+        } else if (val === 'about') { 
+          respRow.innerHTML = 'Junior Full-Stack Developer из Баку, Азербайджан.'; 
+        } else if (val === 'contact') { 
+          respRow.innerHTML = 'Email: akshingadimov@gmail.com'; 
+        } else if (val === 'clear') { 
+          cliBody.querySelectorAll('div:not(.cli-input-row)').forEach(el => el.remove()); 
+          cliInput.value = ''; 
+          return; 
+        } else if (val === 'exit') { 
+          closeTerminal(); 
+          cliInput.value = ''; 
+          return; 
+        } else if (val === '') { 
+          respRow.innerHTML = ''; 
+        } else { 
+          respRow.innerHTML = `Команда не найдена: ${val}. Введите 'help' для справки.`; 
+        } 
+ 
+        cliBody.insertBefore(respRow, cliInput.parentElement); 
+        cliInput.value = ''; 
+        cliBody.scrollTop = cliBody.scrollHeight; 
+      } 
+    }); 
+ 
+    /* ================= REVEAL ON SCROLL ================= */ 
+    const observer = new IntersectionObserver((entries) => { 
+      entries.forEach(entry => { 
+        if (entry.isIntersecting) { 
+          entry.target.classList.add('visible'); 
+        } 
+      }); 
+    }, { threshold: 0.1 }); 
+ 
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el)); 
+  </script> 
+</body> 
 </html>
