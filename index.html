@@ -550,6 +550,27 @@
   .manifest .str { color: #FFD08A; }
   .manifest .punc { color: rgba(240,243,236,.4); }
 
+  /* ================= CV DOWNLOAD ================= */
+
+  .cv-lead {
+    max-width: 520px;
+    margin-top: 16px;
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  .cv-row { padding: 18px; }
+
+  .cv-lang {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12.5px;
+    color: var(--muted);
+  }
+
+  /* для скачивания стрелка уходит вниз, а не вправо-вверх */
+  .cv-row:hover .file-link-arrow { transform: translateY(3px); }
+
   /* ================= CONTACT ================= */
 
   .contact-box {
@@ -798,6 +819,7 @@
       <div class="nav-links">
         <a href="#work" data-i18n="nav_work">проекты</a>
         <a href="#about" data-i18n="nav_about">о себе</a>
+        <a href="#cv" data-i18n="nav_cv">резюме</a>
         <a href="#contact" data-i18n="nav_contact">контакты</a>
       </div>
 
@@ -1058,6 +1080,53 @@
     </div>
   </section>
 
+  <section id="cv">
+    <div class="container">
+      <div class="reveal">
+        <div class="section-label" data-i18n="cv_label">// резюме</div>
+        <h2 class="section-title" data-i18n="cv_title">Скачать CV.</h2>
+        <p class="cv-lead" data-i18n="cv_desc">Резюме в формате PDF на русском, английском и азербайджанском — выберите нужный язык.</p>
+      </div>
+
+      <div class="tree reveal">
+        <div class="tree-head">
+          <span class="dots"><i></i><i></i><i></i></span>
+          ~/akshin/cv
+        </div>
+
+        <a href="./cv_ru.pdf" download="Akshin_Gadimov_CV_RU.pdf" class="file-row cv-row">
+          <div class="file-head">
+            <span class="file-branch">├──</span>
+            <span class="file-name">cv_ru.pdf</span>
+            <span class="file-badge">PDF</span>
+            <span class="cv-lang" lang="ru">Русский</span>
+            <span class="file-link-arrow">↓</span>
+          </div>
+        </a>
+
+        <a href="./cv_en.pdf" download="Akshin_Gadimov_CV_EN.pdf" class="file-row cv-row">
+          <div class="file-head">
+            <span class="file-branch">├──</span>
+            <span class="file-name">cv_en.pdf</span>
+            <span class="file-badge">PDF</span>
+            <span class="cv-lang" lang="en">English</span>
+            <span class="file-link-arrow">↓</span>
+          </div>
+        </a>
+
+        <a href="./cv_az.pdf" download="Akshin_Gadimov_CV_AZ.pdf" class="file-row cv-row">
+          <div class="file-head">
+            <span class="file-branch">└──</span>
+            <span class="file-name">cv_az.pdf</span>
+            <span class="file-badge">PDF</span>
+            <span class="cv-lang" lang="az">Azərbaycanca</span>
+            <span class="file-link-arrow">↓</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
   <section id="contact">
     <div class="container">
       <div class="contact-box reveal">
@@ -1110,6 +1179,7 @@
       ru: {
         nav_work: "проекты",
         nav_about: "о себе",
+        nav_cv: "резюме",
         nav_contact: "контакты",
         status_text: "open_to_work",
         hero_eyebrow: "// full-stack developer — баку, азербайджан",
@@ -1131,6 +1201,9 @@
         about_label: "// о себе",
         about_title: "Как я строю.",
         about_text: 'Для меня важна грань между <strong>«работает»</strong> и <strong>«приятно пользоваться».</strong><br><br>Это означает чистую архитектуру внутри, продуманные интерфейсы снаружи и внимание к детализации, чтобы всё работало быстро и отзывчиво.',
+        cv_label: "// резюме",
+        cv_title: "Скачать CV.",
+        cv_desc: "Резюме в формате PDF на русском, английском и азербайджанском — выберите нужный язык.",
         contact_label: "// контакты",
         contact_title: 'Есть идея<br>проекта?',
         contact_desc: "Сайт, продукт, дашборд или экспериментальная задача — напишите мне, что планируете создать, и обсудим детали.",
@@ -1141,6 +1214,7 @@
       en: {
         nav_work: "work",
         nav_about: "about",
+        nav_cv: "cv",
         nav_contact: "contact",
         status_text: "open_to_work",
         hero_eyebrow: "// full-stack developer — baku, az",
@@ -1162,6 +1236,9 @@
         about_label: "// about",
         about_title: "How I build.",
         about_text: 'I care about the border between <strong>"works"</strong> and <strong>"feels great to use."</strong><br><br>This means clean internal architecture, well-thought-out interfaces, and keen attention to detail.',
+        cv_label: "// resume",
+        cv_title: "Download my CV.",
+        cv_desc: "My resume as a PDF in Russian, English, and Azerbaijani — pick whichever suits you.",
         contact_label: "// contact",
         contact_title: 'Have a project<br>in mind?',
         contact_desc: "A website, product, dashboard, or experimental task — let's discuss what you want to build.",
@@ -1425,11 +1502,16 @@
         respRow.style.marginBottom = '8px';
 
         if (val === 'help') {
-          respRow.innerHTML = 'Доступные команды: <br>- <b>projects</b>: список проектов<br>- <b>about</b>: информация обо мне<br>- <b>contact</b>: связаться<br>- <b>clear</b>: очистить терминал<br>- <b>exit</b>: закрыть консоль';
+          respRow.innerHTML = 'Доступные команды: <br>- <b>projects</b>: список проектов<br>- <b>about</b>: информация обо мне<br>- <b>cv</b>: скачать резюме<br>- <b>contact</b>: связаться<br>- <b>clear</b>: очистить терминал<br>- <b>exit</b>: закрыть консоль';
         } else if (val === 'projects') {
           respRow.innerHTML = '1. Hikari Sushi (https://akshin013.github.io/SushiSite/)<br>2. Herakl Gym (https://akshin013.github.io/HeraklGym/)<br>3. Coca-Cola (https://akshin013.github.io/CocaCola/)'; 
         } else if (val === 'about') { 
           respRow.innerHTML = 'Junior Full-Stack Developer из Баку, Азербайджан.'; 
+        } else if (val === 'cv') {
+          respRow.innerHTML = 'Скачать резюме:<br>' +
+            '- <a href="./cv/Akshin_Gadimov_CV_RU.pdf" download style="color:var(--accent)">RU</a><br>' +
+            '- <a href="./cv/Akshin_Gadimov_CV_EN.pdf" download style="color:var(--accent)">EN</a><br>' +
+            '- <a href="./cv/Akshin_Gadimov_CV_AZ.pdf" download style="color:var(--accent)">AZ</a>';
         } else if (val === 'contact') { 
           respRow.innerHTML = 'Email: akshingadimov@gmail.com'; 
         } else if (val === 'clear') { 
@@ -1464,4 +1546,4 @@
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el)); 
   </script> 
 </body> 
-</html>
+</html> 
